@@ -60,6 +60,8 @@ EXPOSE 80/tcp 443/tcp
 
 WORKDIR ${REDMINE_INSTALL_DIR}
 
+RUN git clone "https://github.com/cdwertmann/recaptcha" plugins/recaptcha
+
 ENTRYPOINT ["/sbin/entrypoint.sh"]
 
 CMD ["app:start"]
