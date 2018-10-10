@@ -59,6 +59,8 @@ RUN chmod 755 /sbin/entrypoint.sh \
  && sed -i '/session    required     pam_loginuid.so/c\#session    required   pam_loginuid.so' /etc/pam.d/cron
 EXPOSE 80/tcp 443/tcp
 
+COPY config/props.yml ${REDMINE_INSTALL_DIR}/config/props.yml
+
 WORKDIR ${REDMINE_INSTALL_DIR}
 
 RUN git clone "https://github.com/cdwertmann/recaptcha" plugins/recaptcha
