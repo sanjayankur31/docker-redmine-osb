@@ -52,8 +52,8 @@ RUN bash ${REDMINE_BUILD_ASSETS_DIR}/install.sh
 COPY assets/runtime/ ${REDMINE_RUNTIME_ASSETS_DIR}/
 
 
-RUN echo SERVER_IP
-RUN echo ${SERVER_IP}
+ARG SERVER_IP
+RUN echo "SERVER_IP: $SERVER_IP"
 COPY assets/tools/ /usr/bin/
 
 COPY entrypoint.sh /sbin/entrypoint.sh
