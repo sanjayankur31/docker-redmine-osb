@@ -52,8 +52,6 @@ RUN bash ${REDMINE_BUILD_ASSETS_DIR}/install.sh
 COPY assets/runtime/ ${REDMINE_RUNTIME_ASSETS_DIR}/
 
 
-ARG SERVER_IP
-RUN echo "SERVER_IP: $SERVER_IP"
 COPY assets/tools/ /usr/bin/
 
 COPY entrypoint.sh /sbin/entrypoint.sh
@@ -62,7 +60,11 @@ RUN chmod 755 /sbin/entrypoint.sh \
  && sed -i '/session    required     pam_loginuid.so/c\#session    required   pam_loginuid.so' /etc/pam.d/cron
 EXPOSE 80/tcp 443/tcp
 
+ARG SERVER_IP
+ARG GEPPETTO_IP
 COPY config/props.yml ${REDMINE_INSTALL_DIR}/config/props.yml
+RUN sed -i 's@serverIP:.*$@serverIP: '$SERVER_IP'@' ${REDMINE_INSTALL_DIR}/config/props.yml
+RUN sed -i 's@geppettoIP:.*$@geppettoIP: '$GEPPETTO_IP'@' ${REDMINE_INSTALL_DIR}/config/props.yml
 
 WORKDIR ${REDMINE_INSTALL_DIR}
 
