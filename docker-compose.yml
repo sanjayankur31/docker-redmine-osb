@@ -38,14 +38,14 @@ services:
     - REDMINE_BACKUP_EXPIRY=
     - REDMINE_BACKUP_TIME=
 
-    - SMTP_ENABLED=false
+    - SMTP_ENABLED=true
     - SMTP_METHOD=smtp
-    - SMTP_DOMAIN=www.example.com
-    - SMTP_HOST=smtp.gmail.com
-    - SMTP_PORT=587
-    - SMTP_USER=mailer@example.com
-    - SMTP_PASS=password
-    - SMTP_STARTTLS=true
+    - SMTP_DOMAIN=example.net
+    - SMTP_HOST=smtp.example.net
+    - SMTP_PORT=25
+    - SMTP_USER=redmine@example.net
+    - SMTP_PASS=redmine
+    - SMTP_STARTTLS=false
     - SMTP_AUTHENTICATION=:login
 
     - IMAP_ENABLED=false
