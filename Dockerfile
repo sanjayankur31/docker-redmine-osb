@@ -69,7 +69,7 @@ RUN sed -i 's@geppettoIP:.*$@geppettoIP: '$GEPPETTO_IP'@' ${REDMINE_INSTALL_DIR}
 
 WORKDIR ${REDMINE_INSTALL_DIR}
 
-RUN git clone "https://github.com/cdwertmann/recaptcha" plugins/recaptcha
+RUN git clone "https://github.com/cdwertmann/recaptcha" plugins/recaptcha && mkdir -p public/geppetto/tmp
 
 ENTRYPOINT ["/sbin/entrypoint.sh"]
 
