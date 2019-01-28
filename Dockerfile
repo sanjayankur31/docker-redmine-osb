@@ -67,15 +67,11 @@ COPY config/configuration.yml ${REDMINE_INSTALL_DIR}/config/configuration.yml
 RUN sed -i 's@serverIP:.*$@serverIP: '$SERVER_IP'@' ${REDMINE_INSTALL_DIR}/config/props.yml
 RUN sed -i 's@geppettoIP:.*$@geppettoIP: '$GEPPETTO_IP'@' ${REDMINE_INSTALL_DIR}/config/props.yml
 
-RUN mkdir -p public/geppetto/tmp
+RUN mkdir -p public/geppetto/tmp 
 RUN chown -R redmine:redmine public/geppetto/tmp
 RUN git clone "https://github.com/cdwertmann/recaptcha" plugins/recaptcha
-RUN mkdir /home/svnsvn/
-RUN git clone --recurse https://github.com/mattearnshaw/osbprojects /home/svnsvn/myGitRepositories ; \
-        rm -rf /home/svnsvn/myGitRepositories/* ; \
-	cd /home/svnsvn/myGitRepositories/.git/modules ; \
-	for FILE in *.git; do cd $FILE && sed -i "/worktree/d" config && git config --bool core.bare true && cd ..; done ; \
-        mv * ../..
+RUN mkdir -p /home/svnsvn/myGitRepositories
+#RUN SELECT value FROM custom_values WHERE custom_field_id=14 and value!='';  
 RUN chown -R redmine:redmine /home/svnsvn
 
 WORKDIR ${REDMINE_INSTALL_DIR}
