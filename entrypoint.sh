@@ -2,6 +2,8 @@
 set -e
 source ${REDMINE_RUNTIME_ASSETS_DIR}/functions
 
+service start sendmail
+
 [[ $DEBUG == true ]] && set -x
 
 case ${1} in
