@@ -42,6 +42,7 @@ RUN apt-get update \
  && update-locale LANG=C.UTF-8 LC_MESSAGES=POSIX \
  && gem install --no-document bundler \
  && gem install rails -v 4.2.7.1 \
+ && gem install recaptcha \
  && rm -rf /var/lib/apt/lists/*
 
 COPY assets/build/ ${REDMINE_BUILD_ASSETS_DIR}/
@@ -50,6 +51,7 @@ RUN bash ${REDMINE_BUILD_ASSETS_DIR}/install.sh
 
 COPY assets/runtime/ ${REDMINE_RUNTIME_ASSETS_DIR}/
 
+
 COPY assets/tools/ /usr/bin/
 
 COPY entrypoint.sh /sbin/entrypoint.sh
@@ -57,6 +59,12 @@ COPY entrypoint.sh /sbin/entrypoint.sh
 RUN chmod 755 /sbin/entrypoint.sh \
  && sed -i '/session    required     pam_loginuid.so/c\#session    required   pam_loginuid.so' /etc/pam.d/cron
 EXPOSE 80/tcp 443/tcp
+
+ARG SERVER_IP
+ARG GEPPETTO_IP
+COPY config/props.yml ${REDMINE_INSTALL_DIR}/config/props.yml
+RUN sed -i 's@serverIP:.*$@serverIP: '$SERVER_IP'@' ${REDMINE_INSTALL_DIR}/config/props.yml
+RUN sed -i 's@geppettoIP:.*$@geppettoIP: '$GEPPETTO_IP'@' ${REDMINE_INSTALL_DIR}/config/props.yml
 
 WORKDIR ${REDMINE_INSTALL_DIR}
 
