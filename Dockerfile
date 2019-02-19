@@ -67,9 +67,11 @@ COPY config/configuration.yml ${REDMINE_INSTALL_DIR}/config/configuration.yml
 RUN sed -i 's@serverIP:.*$@serverIP: '$SERVER_IP'@' ${REDMINE_INSTALL_DIR}/config/props.yml
 RUN sed -i 's@geppettoIP:.*$@geppettoIP: '$GEPPETTO_IP'@' ${REDMINE_INSTALL_DIR}/config/props.yml
 
-RUN mkdir -p public/geppetto/tmp 
-RUN chown -R redmine:redmine public/geppetto/tmp
-RUN git clone "https://github.com/cdwertmann/recaptcha" plugins/recaptcha
+RUN mkdir -p ${REDMINE_INSTALL_DIR}/public/geppetto/tmp
+RUN chown -R redmine:redmine ${REDMINE_INSTALL_DIR}/public/geppetto/tmp
+RUN git clone "https://github.com/cdwertmann/recaptcha" ${REDMINE_INSTALL_DIR}/plugins/recaptcha
+# delete view provided by recaptcha plugin (interferes with our redmine mods)
+RUN rm -rf ${REDMINE_INSTALL_DIR}/plugins/recaptcha/app/views/account
 RUN mkdir -p /home/svnsvn/myGitRepositories
 #RUN SELECT value FROM custom_values WHERE custom_field_id=14 and value!='';  
 RUN chown -R redmine:redmine /home/svnsvn
