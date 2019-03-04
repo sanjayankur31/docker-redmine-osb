@@ -69,6 +69,7 @@ RUN sed -i 's@geppettoIP:.*$@geppettoIP: '$GEPPETTO_IP'@' ${REDMINE_INSTALL_DIR}
 
 RUN mkdir -p ${REDMINE_INSTALL_DIR}/public/geppetto/tmp
 RUN chown -R redmine:redmine ${REDMINE_INSTALL_DIR}/public/geppetto/tmp
+RUN rm -rf ${REDMINE_INSTALL_DIR}/plugins/recaptcha 
 RUN git clone "https://github.com/cdwertmann/recaptcha" ${REDMINE_INSTALL_DIR}/plugins/recaptcha
 # delete view provided by recaptcha plugin (interferes with our redmine mods)
 RUN rm -rf ${REDMINE_INSTALL_DIR}/plugins/recaptcha/app/views/account
