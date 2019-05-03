@@ -42,7 +42,7 @@ RUN apt-get update \
  && update-locale LANG=C.UTF-8 LC_MESSAGES=POSIX \
  && gem install rails -v 4.2.7.1 \
  && gem install recaptcha \
- && gem install bundler -v 1.17.1 \
+ && gem install bundler -v 1.17.3 \
  && rm -rf /var/lib/apt/lists/*
 
 COPY assets/build/ ${REDMINE_BUILD_ASSETS_DIR}/
