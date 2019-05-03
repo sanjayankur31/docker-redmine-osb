@@ -36,7 +36,7 @@ if [[ -f ${REDMINE_BUILD_ASSETS_DIR}/redmine-${REDMINE_VERSION}.tar.gz ]]; then
   exec_as_redmine tar -zvxf ${REDMINE_BUILD_ASSETS_DIR}/redmine-${REDMINE_VERSION}.tar.gz --strip=1 -C ${REDMINE_INSTALL_DIR}
 else
   echo "Downloading Redmine ${REDMINE_VERSION}..."
-  exec_as_redmine wget "https://github.com/frodriguez4600/redmine/archive/no-gemlock.tar.gz" -O /tmp/redmine-${REDMINE_VERSION}.tar.gz
+  exec_as_redmine wget "https://github.com/rodriguez-facundo/redmine/archive/no-gemlock.tar.gz" -O /tmp/redmine-${REDMINE_VERSION}.tar.gz
 
   echo "Extracting..."
   exec_as_redmine tar -zxf /tmp/redmine-${REDMINE_VERSION}.tar.gz --strip=1 -C ${REDMINE_INSTALL_DIR}
