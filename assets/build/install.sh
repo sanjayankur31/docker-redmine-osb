@@ -58,7 +58,7 @@ sed -i \
 (
   echo "${PG_GEM}";
   echo "${MYSQL2_GEM}";
-  echo 'gem "unicorn"';
+  echo 'gem "unicorn", "5.4.1"';
   echo 'gem "dalli", "~> 2.7.0"';
 ) >> ${REDMINE_INSTALL_DIR}/Gemfile
 
