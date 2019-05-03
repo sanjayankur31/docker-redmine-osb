@@ -43,6 +43,7 @@ RUN apt-get update \
  && gem install rails -v 4.2.7.1 \
  && gem install recaptcha \
  && gem install bundler -v 1.17.3 \
+ && gem install unicorn -v 5.4.1 \
  && rm -rf /var/lib/apt/lists/*
 
 COPY assets/build/ ${REDMINE_BUILD_ASSETS_DIR}/
