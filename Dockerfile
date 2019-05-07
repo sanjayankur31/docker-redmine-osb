@@ -41,7 +41,6 @@ RUN apt-get update \
       libxslt1.1 libffi6 zlib1g gsfonts \
  && update-locale LANG=C.UTF-8 LC_MESSAGES=POSIX \
  && gem install rails -v 4.2.7.1 \
- && gem install recaptcha \
  && gem install bundler -v 1.17.3 \
  && rm -rf /var/lib/apt/lists/*
 
