@@ -1,4 +1,1 @@
-*.zip
-*.tar.gz
-*.gem
-node_modules
+.DS_Store

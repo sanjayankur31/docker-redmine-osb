@@ -1,4 +1,4 @@
-serverIP: http://localhost:80/
-geppettoIP: http://localhost:8080/
+serverIP:
+geppettoIP:
 geppettoContextPath: "org.geppetto.frontend/"
 hasGeppettoServer: true

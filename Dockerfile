@@ -1,5 +1,8 @@
 FROM ubuntu:xenial-20180705 AS add-apt-repositories
 
+ARG SERVER_IP=http://localhost:80/
+ARG GEPPETTO_IP=http://localhost:8080/
+
 RUN apt-get update \
  && DEBIAN_FRONTEND=noninteractive apt-get install -y wget \
  && apt-key adv --keyserver keyserver.ubuntu.com --recv E1DD270288B4E6030699E45FA1715D88E1DF1F24 \
@@ -59,14 +62,10 @@ RUN chmod 755 /sbin/entrypoint.sh \
  && sed -i '/session    required     pam_loginuid.so/c\#session    required   pam_loginuid.so' /etc/pam.d/cron
 EXPOSE 80/tcp 443/tcp
 
-ARG SERVER_IP
-ARG GEPPETTO_IP
 COPY config/props.yml ${REDMINE_INSTALL_DIR}/config/props.yml
 COPY config/configuration.yml ${REDMINE_INSTALL_DIR}/config/configuration.yml
-# RUN sed -ie 's/serverIP: http:\/\/0.0.0.0:3000\//serverIP: '$SERVER_IP'/g' ${REDMINE_INSTALL_DIR}/config/props.yml
-# RUN sed -ie 's/geppettoIP: http:\/\/127.0.0.1:8080\//geppettoIP: '$GEPPETTO_IP'/g' ${REDMINE_INSTALL_DIR}/config/props.yml
-# RUN sed -i 's@serverIP:.*$@serverIP: '$SERVER_IP'@' ${REDMINE_INSTALL_DIR}/config/props.yml
-# RUN sed -i 's@geppettoIP:.*$@geppettoIP: '$GEPPETTO_IP'@' ${REDMINE_INSTALL_DIR}/config/props.yml
+RUN sed -ie 's/serverIP:/serverIP: '$SERVER_IP'/g' ${REDMINE_INSTALL_DIR}/config/props.yml
+RUN sed -ie 's/geppettoIP:/geppettoIP: '$GEPPETTO_IP'/g' ${REDMINE_INSTALL_DIR}/config/props.yml
 
 RUN mkdir -p ${REDMINE_INSTALL_DIR}/public/geppetto/tmp
 RUN chown -R redmine:redmine ${REDMINE_INSTALL_DIR}/public/geppetto/tmp
