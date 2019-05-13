@@ -1,8 +1,5 @@
 FROM ubuntu:xenial-20180705 AS add-apt-repositories
 
-ARG SERVER_IP=http://localhost:80/
-ARG GEPPETTO_IP=http://localhost:8080/
-
 RUN apt-get update \
  && DEBIAN_FRONTEND=noninteractive apt-get install -y wget \
  && apt-key adv --keyserver keyserver.ubuntu.com --recv E1DD270288B4E6030699E45FA1715D88E1DF1F24 \
@@ -61,6 +58,12 @@ COPY entrypoint.sh /sbin/entrypoint.sh
 RUN chmod 755 /sbin/entrypoint.sh \
  && sed -i '/session    required     pam_loginuid.so/c\#session    required   pam_loginuid.so' /etc/pam.d/cron
 EXPOSE 80/tcp 443/tcp
+
+ARG SERVER_IP=http://localhost:80/
+ARG GEPPETTO_IP=http://localhost:8080/
+
+ENV SERVER_IP=${SERVER_IP}
+ENV GEPPETTO_IP=${GEPPETTO_IP}
 
 COPY config/props.yml ${REDMINE_INSTALL_DIR}/config/props.yml
 COPY config/configuration.yml ${REDMINE_INSTALL_DIR}/config/configuration.yml
