@@ -41,8 +41,7 @@ RUN apt-get update \
       libxslt1.1 libffi6 zlib1g gsfonts \
  && update-locale LANG=C.UTF-8 LC_MESSAGES=POSIX \
  && gem install rails -v 4.2.7.1 \
- && gem install recaptcha \
- && gem install bundler -v 1.17.1 \
+ && gem install bundler -v 1.17.3 \
  && rm -rf /var/lib/apt/lists/*
 
 COPY assets/build/ ${REDMINE_BUILD_ASSETS_DIR}/
@@ -60,12 +59,16 @@ RUN chmod 755 /sbin/entrypoint.sh \
  && sed -i '/session    required     pam_loginuid.so/c\#session    required   pam_loginuid.so' /etc/pam.d/cron
 EXPOSE 80/tcp 443/tcp
 
-ARG SERVER_IP
-ARG GEPPETTO_IP
+ARG SERVER_IP=http://localhost:80/
+ARG GEPPETTO_IP=http://localhost:8080/
+
+ENV SERVER_IP=${SERVER_IP}
+ENV GEPPETTO_IP=${GEPPETTO_IP}
+
 COPY config/props.yml ${REDMINE_INSTALL_DIR}/config/props.yml
 COPY config/configuration.yml ${REDMINE_INSTALL_DIR}/config/configuration.yml
-RUN sed -i 's@serverIP:.*$@serverIP: '$SERVER_IP'@' ${REDMINE_INSTALL_DIR}/config/props.yml
-RUN sed -i 's@geppettoIP:.*$@geppettoIP: '$GEPPETTO_IP'@' ${REDMINE_INSTALL_DIR}/config/props.yml
+RUN sed -i -e 's~serverIP:~serverIP: '$SERVER_IP'~g' ${REDMINE_INSTALL_DIR}/config/props.yml
+RUN sed -i -e 's~geppettoIP:~geppettoIP: '$GEPPETTO_IP'~g' ${REDMINE_INSTALL_DIR}/config/props.yml
 
 RUN mkdir -p ${REDMINE_INSTALL_DIR}/public/geppetto/tmp
 RUN chown -R redmine:redmine ${REDMINE_INSTALL_DIR}/public/geppetto/tmp
