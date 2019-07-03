@@ -35,14 +35,13 @@ COPY --from=add-apt-repositories /etc/apt/sources.list /etc/apt/sources.list
 RUN apt-get update \
  && DEBIAN_FRONTEND=noninteractive apt-get install --no-install-recommends -y \
       supervisor logrotate nginx mysql-client postgresql-client ca-certificates sudo tzdata \
-      imagemagick subversion git cvs bzr mercurial darcs rsync ruby${RUBY_VERSION} locales openssh-client \
+      sendmail imagemagick subversion git cvs bzr mercurial darcs rsync ruby${RUBY_VERSION} locales openssh-client \
       gcc g++ make patch pkg-config gettext-base ruby${RUBY_VERSION}-dev libc6-dev zlib1g-dev libxml2-dev \
       libmysqlclient20 libpq5 libyaml-0-2 libcurl3 libssl1.0.0 uuid-dev xz-utils \
       libxslt1.1 libffi6 zlib1g gsfonts \
  && update-locale LANG=C.UTF-8 LC_MESSAGES=POSIX \
- && gem install --no-document bundler \
  && gem install rails -v 4.2.7.1 \
- && gem install recaptcha \
+ && gem install bundler -v 1.17.3 \
  && rm -rf /var/lib/apt/lists/*
 
 COPY assets/build/ ${REDMINE_BUILD_ASSETS_DIR}/
@@ -60,17 +59,28 @@ RUN chmod 755 /sbin/entrypoint.sh \
  && sed -i '/session    required     pam_loginuid.so/c\#session    required   pam_loginuid.so' /etc/pam.d/cron
 EXPOSE 80/tcp 443/tcp
 
-ARG SERVER_IP
-ARG GEPPETTO_IP
+ARG SERVER_IP=http://localhost:80/
+ARG GEPPETTO_IP=http://localhost:8080/
+
+ENV SERVER_IP=${SERVER_IP}
+ENV GEPPETTO_IP=${GEPPETTO_IP}
+
 COPY config/props.yml ${REDMINE_INSTALL_DIR}/config/props.yml
 COPY config/configuration.yml ${REDMINE_INSTALL_DIR}/config/configuration.yml
-RUN sed -i 's@serverIP:.*$@serverIP: '$SERVER_IP'@' ${REDMINE_INSTALL_DIR}/config/props.yml
-RUN sed -i 's@geppettoIP:.*$@geppettoIP: '$GEPPETTO_IP'@' ${REDMINE_INSTALL_DIR}/config/props.yml
+RUN sed -i -e 's~serverIP:~serverIP: '$SERVER_IP'~g' ${REDMINE_INSTALL_DIR}/config/props.yml
+RUN sed -i -e 's~geppettoIP:~geppettoIP: '$GEPPETTO_IP'~g' ${REDMINE_INSTALL_DIR}/config/props.yml
+
+RUN mkdir -p ${REDMINE_INSTALL_DIR}/public/geppetto/tmp
+RUN chown -R redmine:redmine ${REDMINE_INSTALL_DIR}/public/geppetto/tmp
+RUN rm -rf ${REDMINE_INSTALL_DIR}/plugins/recaptcha 
+RUN git clone "https://github.com/cdwertmann/recaptcha" ${REDMINE_INSTALL_DIR}/plugins/recaptcha
+# delete view provided by recaptcha plugin (interferes with our redmine mods)
+RUN rm -rf ${REDMINE_INSTALL_DIR}/plugins/recaptcha/app/views/account
+RUN mkdir -p /home/svnsvn/myGitRepositories
+#RUN SELECT value FROM custom_values WHERE custom_field_id=14 and value!='';  
+RUN chown -R redmine:redmine /home/svnsvn
 
 WORKDIR ${REDMINE_INSTALL_DIR}
-
-RUN git clone "https://github.com/cdwertmann/recaptcha" plugins/recaptcha && mkdir -p public/geppetto/tmp
-
 ENTRYPOINT ["/sbin/entrypoint.sh"]
 
 CMD ["app:start"]

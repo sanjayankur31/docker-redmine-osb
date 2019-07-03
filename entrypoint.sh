@@ -4,6 +4,8 @@ source ${REDMINE_RUNTIME_ASSETS_DIR}/functions
 
 [[ $DEBUG == true ]] && set -x
 
+service sendmail start
+
 case ${1} in
   app:init|app:start|app:rake|app:backup:create|app:backup:restore)
 
