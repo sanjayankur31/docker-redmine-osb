@@ -60,11 +60,11 @@ RUN chmod 755 /sbin/entrypoint.sh \
  && sed -i '/session    required     pam_loginuid.so/c\#session    required   pam_loginuid.so' /etc/pam.d/cron
 EXPOSE 80/tcp 443/tcp
 
-ARG SERVER_IP=http://localhost:80/
-ARG GEPPETTO_IP=http://localhost:8080/
+ARG SERVER_IP
+ARG GEPPETTO_IP
 
-ENV SERVER_IP=${SERVER_IP}
-ENV GEPPETTO_IP=${GEPPETTO_IP}
+ENV SERVER_IP=${SERVER_IP:-"http://localhost:80/"}
+ENV GEPPETTO_IP=${GEPPETTO_IP:-"http://localhost:8080/"}
 
 COPY config/props.yml ${REDMINE_INSTALL_DIR}/config/props.yml
 COPY config/configuration.yml ${REDMINE_INSTALL_DIR}/config/configuration.yml
