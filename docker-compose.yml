@@ -8,7 +8,7 @@ services:
     - DB_PASS=password
     - DB_NAME=redmine
     volumes:
-    - /srv/docker/redmine/postgresql:/var/lib/postgresql
+    - ~/docker-tmp/postgresql:/var/lib/postgresql
 
   redmine:
     image: sameersbn/redmine:3.4.6
@@ -59,4 +59,4 @@ services:
     ports:
     - "10083:80"
     volumes:
-    - /srv/docker/redmine/redmine:/home/redmine/data
+    - ~/docker-tmp/redmine:/home/redmine/data
