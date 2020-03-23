@@ -40,9 +40,9 @@ RUN apt-get update \
       libmysqlclient20 libpq5 libyaml-0-2 libcurl3 libssl1.0.0 uuid-dev xz-utils \
       libxslt1.1 libffi6 zlib1g gsfonts \
  && update-locale LANG=C.UTF-8 LC_MESSAGES=POSIX \
- && gem install sprockets -v 3.7.2 \
- && gem install rails -v 4.2.7.1 \
- && gem install bundler -v 1.17.3 \
+ && gem install --no-rdoc --no-ri sprockets -v 3.7.2 \
+ && gem install --no-rdoc --no-ri rails -v 4.2.7.1 \
+ && gem install --no-rdoc --no-ri bundler -v 1.17.3 \
  && rm -rf /var/lib/apt/lists/*
 
 COPY assets/build/ ${REDMINE_BUILD_ASSETS_DIR}/
