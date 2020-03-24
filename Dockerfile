@@ -1,4 +1,4 @@
-FROM ubuntu:xenial-20180705 AS add-apt-repositories
+FROM ubuntu:xenial-20180705 AS ubuntu-xenial-20180705
 
 RUN apt-get update \
  && DEBIAN_FRONTEND=noninteractive apt-get install -y wget \
@@ -28,9 +28,9 @@ ENV REDMINE_INSTALL_DIR="${REDMINE_HOME}/redmine" \
     REDMINE_BUILD_ASSETS_DIR="${REDMINE_ASSETS_DIR}/build" \
     REDMINE_RUNTIME_ASSETS_DIR="${REDMINE_ASSETS_DIR}/runtime"
 
-COPY --from=add-apt-repositories /etc/apt/trusted.gpg /etc/apt/trusted.gpg
+COPY --from=ubuntu-xenial-20180705 /etc/apt/trusted.gpg /etc/apt/trusted.gpg
 
-COPY --from=add-apt-repositories /etc/apt/sources.list /etc/apt/sources.list
+COPY --from=ubuntu-xenial-20180705 /etc/apt/sources.list /etc/apt/sources.list
 
 RUN apt-get update \
  && DEBIAN_FRONTEND=noninteractive apt-get install --no-install-recommends -y \
