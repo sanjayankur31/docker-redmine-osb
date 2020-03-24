@@ -1,7 +1,7 @@
 FROM ubuntu:xenial-20180705 AS ubuntu-xenial-20180705
 
-RUN apt-get update \
- && DEBIAN_FRONTEND=noninteractive apt-get install -y wget \
+RUN apt-get update -qq \
+ && DEBIAN_FRONTEND=noninteractive apt-get install -qq wget \
  && apt-key adv --keyserver keyserver.ubuntu.com --recv E1DD270288B4E6030699E45FA1715D88E1DF1F24 \
  && echo "deb http://ppa.launchpad.net/git-core/ppa/ubuntu xenial main" >> /etc/apt/sources.list \
  && apt-key adv --keyserver keyserver.ubuntu.com --recv 80F70E11F0F0D5F10CB20E62F5DA5F09C3173AA6 \
@@ -32,8 +32,8 @@ COPY --from=ubuntu-xenial-20180705 /etc/apt/trusted.gpg /etc/apt/trusted.gpg
 
 COPY --from=ubuntu-xenial-20180705 /etc/apt/sources.list /etc/apt/sources.list
 
-RUN apt-get update \
- && DEBIAN_FRONTEND=noninteractive apt-get install --no-install-recommends -y \
+RUN apt-get update -qq \
+ && DEBIAN_FRONTEND=noninteractive apt-get -qq install --no-install-recommends \
       sendmail supervisor logrotate nginx mysql-client postgresql-client ca-certificates sudo tzdata \
       imagemagick subversion git cvs bzr mercurial darcs rsync ruby${RUBY_VERSION} locales openssh-client \
       gcc g++ make patch pkg-config gettext-base ruby${RUBY_VERSION}-dev libc6-dev zlib1g-dev libxml2-dev \

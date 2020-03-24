@@ -12,8 +12,8 @@ exec_as_redmine() {
 }
 
 # install build dependencies
-apt-get update
-DEBIAN_FRONTEND=noninteractive apt-get install -y ${BUILD_DEPENDENCIES}
+apt-get update -qq
+DEBIAN_FRONTEND=noninteractive apt-get install -qq ${BUILD_DEPENDENCIES}
 
 # add ${REDMINE_USER} user
 adduser --disabled-login --gecos 'Redmine' ${REDMINE_USER}
@@ -186,5 +186,5 @@ stderr_logfile=${REDMINE_LOG_DIR}/supervisor/%(program_name)s.log
 EOF
 
 # purge build dependencies and cleanup apt
-apt-get purge -y --auto-remove ${BUILD_DEPENDENCIES}
+apt-get purge -qq --auto-remove ${BUILD_DEPENDENCIES}
 rm -rf /var/lib/apt/lists/*
